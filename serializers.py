@@ -6,17 +6,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('firstname', 'lastname', 'email', 'phone', 'password')
+        extra_kwargs = {'password': {'write_only': True, 'required':True}}
 
     def create(self, validated_data):
-        """
-        Create and return a new `Snippet` instance, given the validated data.
-        """
-        return User.objects.create(**validated_data)
+        user = User.objects.create(**validated_data)
+        return user
 
     def update(self, user, validated_data):
-        """
-        Update and return an existing `Snippet` instance, given the validated data.
-        """
         user.firstname = validated_data.get('firstname', user.firstname)
         user.lastname = validated_data.get('lastname', user.lastname)
         user.email = validated_data.get('email', user.email)
